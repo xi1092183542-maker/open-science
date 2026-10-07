@@ -428,18 +428,18 @@
     "portReset": "기본값으로 재설정"
   },
   "cli": {
-    "title": "터미널 명령 (osd)",
-    "hint": "터미널에서 쓰는 워크벤치 — 세션, 프로젝트, 파일, 그리고 화면 없는 머신을 위한 헤드리스 서버. 앱과 함께 설치되며 설정할 것이 없습니다.",
-    "readyPath": "준비됨 — 새 터미널에서 `osd`를 실행하세요.",
-    "readyProfile": "준비됨 — {{profile}}에 추가했습니다. 새 터미널에서 `osd`를 실행하세요.",
-    "readyEnvironment": "준비됨 — 사용자 PATH에 추가했습니다. 새 터미널에서 `osd`를 실행하세요.",
+    "title": "터미널 명령 (chem-osd)",
+    "hint": "아래 버튼으로 선택 사항인 chem-osd 터미널 명령을 설치합니다.",
+    "readyPath": "준비됨 — 새 터미널에서 `chem-osd`를 실행하세요.",
+    "readyProfile": "준비됨 — {{profile}}에 추가했습니다. 새 터미널에서 `chem-osd`를 실행하세요.",
+    "readyEnvironment": "준비됨 — 사용자 PATH에 추가했습니다. 새 터미널에서 `chem-osd`를 실행하세요.",
     "unreachable": "설치됐지만 PATH로는 닿지 않습니다. 아래 줄을 셸 프로필에 추가하세요:",
-    "notInstalled": "설치되지 않음. 버튼을 누르거나 앱을 다시 시작하세요.",
-    "unavailable": "이 빌드에는 osd 명령이 들어 있지 않습니다.",
+    "notInstalled": "설치되지 않음. 버튼을 눌러 설치하세요.",
+    "unavailable": "이 빌드에는 chem-osd 명령이 들어 있지 않습니다.",
     "occupied": "이 앱이 만들지 않은 파일이 같은 이름으로 이미 있습니다 — 먼저 이름을 바꿔 주세요.",
     "install": "명령 설치",
     "repair": "다시 설치",
-    "error": "osd 명령 설치에 실패했습니다"
+    "error": "chem-osd 명령 설치에 실패했습니다"
   },
   "memory": {
     "title": "메모리",

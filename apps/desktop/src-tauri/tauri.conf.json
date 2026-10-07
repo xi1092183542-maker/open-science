@@ -1,8 +1,9 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Open Science",
+  "productName": "Chem Science Workbench Dev",
   "version": "0.6.0",
-  "identifier": "com.ai4s.workbench",
+  "identifier": "org.chemscience.workbench.dev",
+  "mainBinaryName": "chem-science-workbench",
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:5173",
@@ -13,7 +14,7 @@
   "app": {
     "windows": [
       {
-        "title": "Open Science",
+        "title": "Chem Science Workbench Dev",
         "width": 1440,
         "height": 900,
         "minWidth": 1000,
@@ -55,6 +56,7 @@
       }
     },
     "resources": {
+      "../../../runtime/third-party-notices": "third-party-notices/",
       "../../../runtime/goal-plugin": "goal-plugin/",
       "../../../runtime/browser-plugin": "browser-plugin/",
       "../../../runtime/history-plugin": "history-plugin/",
@@ -62,7 +64,7 @@
         "../../../runtime/computer": "computer/",
         "computer-use": "computer-use/",
       "../../../runtime/skills/external/ai4s-skills": "skills/",
-      "../../../runtime/skills/external/anthropic-skills": "skills-office/",
+      "../../../runtime/skills/office": "skills-office/",
       "../../../runtime/skills/external/agent-browser": "skills-agent-browser/",
       "../../../runtime/skills/core": "skills-core/",
       "../../../runtime/opencode-profile/agent": "profile/agent/",

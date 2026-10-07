@@ -21,20 +21,20 @@
 ; sidecar that is already gone is not an error. msedgewebview2.exe is
 ; deliberately left alone -- it is shared with every other WebView2 app.
 
-!macro KillSidecarProcess name
-  nsis_tauri_utils::FindProcessCurrentUser "${name}"
-  Pop $0
-  ${If} $0 = 0
-    nsis_tauri_utils::KillProcessCurrentUser "${name}"
-    Pop $0
-    Sleep 500
-  ${EndIf}
-!macroend
+; Capture at include time: inside a macro __FILEDIR__ is the generated installer.
+!define CHEM_HOOK_DIR "${__FILEDIR__}"
 
 !macro KillAllSidecars
-  !insertmacro KillSidecarProcess "opencode.exe"
-  !insertmacro KillSidecarProcess "agent-browser.exe"
-  !insertmacro KillSidecarProcess "uv.exe"
+  ; Match exact installation paths and current-user ownership before stopping.
+  InitPluginsDir
+  File /oname=$PLUGINSDIR\stop-owned-sidecars.ps1 "${CHEM_HOOK_DIR}\stop-owned-sidecars.ps1"
+  nsExec::ExecToStack '"$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "$PLUGINSDIR\stop-owned-sidecars.ps1" -InstallDir "$INSTDIR"'
+  Pop $0
+  Pop $1
+  ${If} $0 != 0
+    DetailPrint "$1"
+    Abort "Could not stop this installation's helpers. Close Chem Science Workbench and retry."
+  ${EndIf}
 !macroend
 
 ; Runs at the top of Section Install, before CheckIfAppIsRunning and before the

@@ -72,9 +72,10 @@ copy_resource runtime/history-plugin history-plugin
 copy_resource runtime/tools tools
 copy_resource runtime/computer computer
 copy_resource runtime/skills/external/ai4s-skills skills
-copy_resource runtime/skills/external/anthropic-skills skills-office
+copy_resource runtime/skills/office skills-office
 copy_resource runtime/skills/external/agent-browser skills-agent-browser
 copy_resource runtime/skills/core skills-core
+copy_resource runtime/third-party-notices third-party-notices
 copy_resource runtime/opencode-profile/agent profile/agent
 copy_resource runtime/opencode-profile/command profile/command
 copy_resource runtime/harness harness

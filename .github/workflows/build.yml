@@ -61,7 +61,7 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24.15.0
           cache: pnpm
 
       - name: Install Rust
@@ -95,7 +95,10 @@ jobs:
 
       - name: Fetch bundled goal plugin
         shell: bash
-        run: bash scripts/dev/fetch-goal-plugin.sh
+        run: |
+          npm ci --prefix scripts/dev/goal-dependencies --ignore-scripts --omit=optional --no-audit --no-fund
+          npm ci --prefix scripts/dev/plugin-runtime --ignore-scripts --omit=optional --no-audit --no-fund
+          node scripts/dev/prepare-goal.mjs
 
       # A fetch script can fail without failing its step: a bash syntax error in
       # fetch-agent-browser.sh aborted the script on every platform, but macOS's
@@ -111,7 +114,7 @@ jobs:
           status=0
           for path in \
             runtime/skills/external/ai4s-skills \
-            runtime/skills/external/anthropic-skills \
+            runtime/skills/office \
             runtime/skills/external/agent-browser/open-science-browser/SKILL.md \
             runtime/goal-plugin/goal-plugin.server.js \
             runtime/browser-plugin/browser-guard.ts \

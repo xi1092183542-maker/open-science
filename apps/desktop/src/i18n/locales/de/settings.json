@@ -430,18 +430,18 @@
     "portReset": "Auf Standard zurücksetzen"
   },
   "cli": {
-    "title": "Terminal-Befehl (osd)",
-    "hint": "Die Werkbank im Terminal — Sitzungen, Projekte, Dateien und ein Server ohne Oberfläche für Maschinen ohne Bildschirm. Kommt mit der App, ohne Einrichtung.",
-    "readyPath": "Bereit — führe `osd` in einem neuen Terminal aus.",
-    "readyProfile": "Bereit — in {{profile}} eingetragen. Führe `osd` in einem neuen Terminal aus.",
-    "readyEnvironment": "Bereit — zu deinem Benutzer-PATH hinzugefügt. Führe `osd` in einem neuen Terminal aus.",
+    "title": "Terminal-Befehl (chem-osd)",
+    "hint": "Installiere den optionalen Terminalbefehl chem-osd mit der Schaltfläche unten.",
+    "readyPath": "Bereit — führe `chem-osd` in einem neuen Terminal aus.",
+    "readyProfile": "Bereit — in {{profile}} eingetragen. Führe `chem-osd` in einem neuen Terminal aus.",
+    "readyEnvironment": "Bereit — zu deinem Benutzer-PATH hinzugefügt. Führe `chem-osd` in einem neuen Terminal aus.",
     "unreachable": "Installiert, aber über deinen PATH nicht erreichbar. Füge diese Zeile in dein Shell-Profil ein:",
-    "notInstalled": "Nicht installiert. Nimm den Knopf oder starte die App neu.",
-    "unavailable": "Dieser Build enthält den Befehl osd nicht.",
+    "notInstalled": "Nicht installiert. Über die Schaltfläche installieren.",
+    "unavailable": "Dieser Build enthält den Befehl chem-osd nicht.",
     "occupied": "Unter diesem Namen liegt bereits eine Datei, die nicht von dieser App stammt — benenne sie zuerst um.",
     "install": "Befehl installieren",
     "repair": "Neu installieren",
-    "error": "Installation des osd-Befehls fehlgeschlagen"
+    "error": "Installation des chem-osd-Befehls fehlgeschlagen"
   },
   "memory": {
     "title": "Gedächtnis",

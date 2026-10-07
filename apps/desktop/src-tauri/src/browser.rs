@@ -15,7 +15,7 @@ use tauri_plugin_shell::ShellExt;
 
 /// Shared with `src/lib/browser.ts`. The fixed namespace lets the app reclaim
 /// only its own browser sessions, without touching a user's agent-browser CLI.
-const BROWSER_NAMESPACE: &str = "open-science-desktop";
+const BROWSER_NAMESPACE: &str = "chem-science-workbench-dev";
 
 fn close_args() -> [&'static str; 4] {
     ["--namespace", BROWSER_NAMESPACE, "close", "--all"]

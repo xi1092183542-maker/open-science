@@ -326,10 +326,9 @@ export async function fetchUsage(now = new Date()): Promise<UsageSummary | null>
   const { todayStartMs, weekStartMs } = usageWindowBounds(now);
   const { invoke } = await import("@tauri-apps/api/core");
   const summary = await invoke<UsageSummary>("agent_usage", { todayStartMs, weekStartMs });
-  // The plan figures are a network call, so a failure there must not cost the
-  // spend figures, which are read from disk and always available.
-  const plan = await invoke<PlanUsage>("plan_usage").catch(() => undefined);
-  return { ...summary, plan };
+  // This fork reports its own runtime only. Do not query other CLIs' provider
+  // quotas: upstream does that by reading their global login credentials.
+  return summary;
 }
 
 interface UsageStore {

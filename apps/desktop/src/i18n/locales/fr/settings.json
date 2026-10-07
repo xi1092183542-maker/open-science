@@ -430,18 +430,18 @@
     "portReset": "Réinitialiser par défaut"
   },
   "cli": {
-    "title": "Commande de terminal (osd)",
-    "hint": "L'atelier depuis un terminal : sessions, projets, fichiers, et un serveur sans interface pour une machine sans écran. Installée avec l'application, sans réglage.",
-    "readyPath": "Prête — lancez `osd` dans un nouveau terminal.",
-    "readyProfile": "Prête — ajoutée à {{profile}}. Lancez `osd` dans un nouveau terminal.",
-    "readyEnvironment": "Prête — ajoutée à votre PATH utilisateur. Lancez `osd` dans un nouveau terminal.",
+    "title": "Commande de terminal (chem-osd)",
+    "hint": "Installez la commande facultative chem-osd avec le bouton ci-dessous.",
+    "readyPath": "Prête — lancez `chem-osd` dans un nouveau terminal.",
+    "readyProfile": "Prête — ajoutée à {{profile}}. Lancez `chem-osd` dans un nouveau terminal.",
+    "readyEnvironment": "Prête — ajoutée à votre PATH utilisateur. Lancez `chem-osd` dans un nouveau terminal.",
     "unreachable": "Installée, mais rien dans votre PATH ne l'atteint. Ajoutez cette ligne à votre profil shell :",
-    "notInstalled": "Pas installée. Utilisez le bouton, ou redémarrez l'application.",
-    "unavailable": "Cette version n'embarque pas la commande osd.",
+    "notInstalled": "Non installée. Utilisez le bouton pour l’installer.",
+    "unavailable": "Cette version n'embarque pas la commande chem-osd.",
     "occupied": "Un fichier que cette application n'a pas écrit porte déjà ce nom — renommez-le d'abord.",
     "install": "Installer la commande",
     "repair": "Réinstaller",
-    "error": "L'installation de la commande osd a échoué"
+    "error": "L'installation de la commande chem-osd a échoué"
   },
   "memory": {
     "title": "Mémoire",

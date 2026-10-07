@@ -2,7 +2,7 @@
 // plus what the Claude Code and Codex CLIs spent elsewhere on this machine.
 use tauri::AppHandle;
 
-use osd_core::usage::{agent_home, collect_usage, UsageSummary};
+use osd_core::usage::{collect_session_spend, collect_workbench_usage, UsageSummary};
 
 use crate::env_of;
 
@@ -19,16 +19,14 @@ pub fn agent_usage(
     today_start_ms: i64,
     week_start_ms: i64,
 ) -> Result<UsageSummary, String> {
-    let home = agent_home().ok_or("could not resolve the home directory")?;
-    // The workbench's own turns live under the runtime root. Missing it is not
-    // an error — the CLI figures are still worth reporting on their own.
-    let runtime_root = osd_core::runtime::runtime_root(&env_of(&app)).ok();
-    Ok(collect_usage(
-        &home,
-        runtime_root.as_deref(),
-        today_start_ms,
-        week_start_ms,
-    ))
+    // The fork reports only its own runtime. External CLI history and login
+    // credentials require a separately designed, explicit import/consent flow.
+    let root = osd_core::runtime::runtime_root(&env_of(&app))?;
+    Ok(UsageSummary {
+        agents: collect_workbench_usage(&root, today_start_ms, week_start_ms).into_iter().collect(),
+        sessions: collect_session_spend(&root, week_start_ms),
+        ..UsageSummary::default()
+    })
 }
 
 /// Which of the given commands this machine can run.

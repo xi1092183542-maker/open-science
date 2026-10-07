@@ -31,7 +31,7 @@ import path from "node:path";
 
 const root = path.resolve(import.meta.dirname, "../..");
 const stage = path.join(root, "apps", "desktop", "src-tauri", "computer-use");
-const BUNDLE_ID = "com.ai4s.workbench.computer-use";
+const BUNDLE_ID = "org.chemscience.workbench.dev.computer-use";
 const DISPLAY_NAME = "Open Science Computer Use";
 
 mkdirSync(stage, { recursive: true });

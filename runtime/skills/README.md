@@ -35,14 +35,14 @@ How they ship, end to end:
 
 To bump the pack version, update `AI4S_SKILLS_COMMIT` in `fetch-skills.sh`.
 
-## Office pack: Anthropic document skills (bundled into the installer)
+## Office pack: independent document workflow
 
-The docx / pdf / pptx / xlsx skills come from Anthropic's open-source
-[anthropics/skills](https://github.com/anthropics/skills) repo (Apache-2.0;
-each skill directory keeps its own `LICENSE.txt`). Same pipeline as above:
-`fetch-skills.sh` pins them into `external/anthropic-skills/`, bundled as the
-`skills-office/` app resource, deployed by `deploy_bundled_skills`. Bump via
-`ANTHROPIC_SKILLS_COMMIT` in `fetch-skills.sh`.
+`office/research-documents/` is authored for this fork under MIT. It provides
+DOCX, XLSX, PPTX and PDF creation using separately licensed Python libraries,
+a deterministic export command, and source/validation guidance. It ships as
+`skills-office/` and is deployed through the existing skill loader. It is not
+based on Anthropic's document skill contents. Dependencies are installed into
+the selected scientific environment, not the user's system Python.
 
 ## Browser skill: official agent-browser core guide
 

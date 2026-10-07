@@ -430,18 +430,18 @@
     "portReset": "Restablecer predeterminado"
   },
   "cli": {
-    "title": "Comando de terminal (osd)",
-    "hint": "El taller desde una terminal: sesiones, proyectos, archivos y un servidor sin interfaz para una máquina sin pantalla. Se instala con la app, sin configurar nada.",
-    "readyPath": "Listo: ejecuta `osd` en una terminal nueva.",
-    "readyProfile": "Listo: añadido a {{profile}}. Ejecuta `osd` en una terminal nueva.",
-    "readyEnvironment": "Listo: añadido a tu PATH de usuario. Ejecuta `osd` en una terminal nueva.",
+    "title": "Comando de terminal (chem-osd)",
+    "hint": "Instala el comando opcional chem-osd con el botón de abajo.",
+    "readyPath": "Listo: ejecuta `chem-osd` en una terminal nueva.",
+    "readyProfile": "Listo: añadido a {{profile}}. Ejecuta `chem-osd` en una terminal nueva.",
+    "readyEnvironment": "Listo: añadido a tu PATH de usuario. Ejecuta `chem-osd` en una terminal nueva.",
     "unreachable": "Instalado, pero nada en tu PATH lo alcanza. Añade esta línea a tu perfil de shell:",
-    "notInstalled": "No instalado. Usa el botón o reinicia la app.",
-    "unavailable": "Esta versión no incluye el comando osd.",
+    "notInstalled": "No instalado. Usa el botón para instalarlo.",
+    "unavailable": "Esta versión no incluye el comando chem-osd.",
     "occupied": "Ya existe un archivo con ese nombre que no escribió esta app: renómbralo primero.",
     "install": "Instalar el comando",
     "repair": "Reinstalar",
-    "error": "No se pudo instalar el comando osd"
+    "error": "No se pudo instalar el comando chem-osd"
   },
   "memory": {
     "title": "Memoria",

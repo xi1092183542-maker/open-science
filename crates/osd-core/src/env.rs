@@ -14,7 +14,7 @@ use crate::runtime::RuntimeState;
 /// the same string as `tauri.conf.json`'s `identifier`, and it MUST stay that
 /// way: `osd` and the desktop app share one runtime root, so a session started
 /// in one is visible in the other.
-pub const IDENTIFIER: &str = "com.ai4s.workbench";
+pub const IDENTIFIER: &str = "org.chemscience.workbench.dev";
 
 struct Inner {
     data_dir: PathBuf,
@@ -71,7 +71,7 @@ impl Env {
         Ok(Env::new(data_dir, resource_dir, platform_document_dir(), version))
     }
 
-    /// `<data dir>` — e.g. `~/Library/Application Support/com.ai4s.workbench`.
+    /// `<data dir>` — e.g. `~/Library/Application Support/org.chemscience.workbench.dev`.
     pub fn data_dir(&self) -> &Path {
         &self.0.data_dir
     }

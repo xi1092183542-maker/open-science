@@ -10,7 +10,7 @@ export const BROWSER_MCP_ID = "open-science-browser";
 /** Keep every browser process owned by this app in one isolated namespace so
  *  Disable and app exit can close it without touching agent-browser sessions
  *  started by the user from another tool. */
-export const BROWSER_NAMESPACE = "open-science-desktop";
+export const BROWSER_NAMESPACE = "chem-science-workbench-dev";
 
 /** Hard fallback when a conversation forgets to release its browser lease. */
 export const BROWSER_IDLE_TIMEOUT_MS = "600000";

@@ -23,7 +23,7 @@ pub const OPENAI_COMPATIBLE_NPM: &str = "@ai-sdk/openai-compatible";
 
 const LEGACY_BROWSER_MCP_ID: &str = "browser-control";
 const BROWSER_MCP_ID: &str = "open-science-browser";
-const BROWSER_NAMESPACE: &str = "open-science-desktop";
+const BROWSER_NAMESPACE: &str = "chem-science-workbench-dev";
 const BROWSER_IDLE_TIMEOUT_MS: &str = "600000";
 
 /// Command tokens the "approve" mode gates behind a prompt, per the AGENTS.md
@@ -1019,7 +1019,7 @@ mod tests {
                 "type":"local",
                 "command":["agent-browser","mcp"],
                 "environment": {
-                    "AGENT_BROWSER_NAMESPACE": "open-science-desktop",
+                    "AGENT_BROWSER_NAMESPACE": "chem-science-workbench-dev",
                     "AGENT_BROWSER_IDLE_TIMEOUT_MS": "600000"
                 }
             })
@@ -1042,7 +1042,7 @@ mod tests {
         assert_eq!(v["mcp"]["open-science-browser"]["new"], json!(true));
         assert_eq!(
             v["mcp"]["open-science-browser"]["environment"]["AGENT_BROWSER_NAMESPACE"],
-            "open-science-desktop"
+            "chem-science-workbench-dev"
         );
     }
 
@@ -1073,7 +1073,7 @@ mod tests {
         let v: Value = serde_json::from_str(&out).unwrap();
         let env = &v["mcp"]["open-science-browser"]["environment"];
         assert_eq!(env["AGENT_BROWSER_PROFILE"], "Default");
-        assert_eq!(env["AGENT_BROWSER_NAMESPACE"], "open-science-desktop");
+        assert_eq!(env["AGENT_BROWSER_NAMESPACE"], "chem-science-workbench-dev");
         assert_eq!(env["AGENT_BROWSER_IDLE_TIMEOUT_MS"], "600000");
         assert!(!browser_uses_legacy_namespace(&out));
         assert!(migrate_browser_integration(&out).is_none());

@@ -454,18 +454,18 @@
     "portReset": "Reset to default"
   },
   "cli": {
-    "title": "Terminal command (osd)",
-    "hint": "The workbench from a terminal — sessions, projects, files, and a headless server for a machine with no screen. Installed with the app; no setup.",
-    "readyPath": "Ready — run `osd` in a new terminal.",
-    "readyProfile": "Ready — added to {{profile}}. Run `osd` in a new terminal.",
-    "readyEnvironment": "Ready — added to your user PATH. Run `osd` in a new terminal.",
+    "title": "Terminal command (chem-osd)",
+    "hint": "Install the optional chem-osd terminal command using the button below.",
+    "readyPath": "Ready — run `chem-osd` in a new terminal.",
+    "readyProfile": "Ready — added to {{profile}}. Run `chem-osd` in a new terminal.",
+    "readyEnvironment": "Ready — added to your user PATH. Run `chem-osd` in a new terminal.",
     "unreachable": "Installed, but nothing on your PATH reaches it. Add this line to your shell profile:",
-    "notInstalled": "Not installed. Use the button, or restart the app.",
-    "unavailable": "This build does not carry the osd command.",
+    "notInstalled": "Not installed. Use the button to install.",
+    "unavailable": "This build does not carry the chem-osd command.",
     "occupied": "A file this app did not write already has that name — rename it first.",
     "install": "Install command",
     "repair": "Reinstall",
-    "error": "Installing the osd command failed"
+    "error": "Installing the chem-osd command failed"
   },
   "memory": {
     "title": "Memory",

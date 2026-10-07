@@ -56,7 +56,7 @@ pub fn runtime_failure(state: &RuntimeState) -> Option<(u64, String)> {
     Some((lifecycle.exits, message))
 }
 
-/// App-private runtime root, e.g. ~/Library/Application Support/com.ai4s.workbench/runtime
+/// App-private runtime root, e.g. ~/Library/Application Support/org.chemscience.workbench.dev/runtime
 pub fn runtime_root(env: &Env) -> Result<PathBuf, String> {
     Ok(env.data_dir().join("runtime"))
 }
@@ -98,7 +98,7 @@ pub const SESSIONS_DIR_NAME: &str = "sessions";
 /// Keep the user-visible workspace root predictable:
 ///
 /// ```text
-/// OpenScience/
+/// ChemScienceWorkbench/
 ///   projects/
 ///   sessions/
 ///   .openscience/
@@ -134,7 +134,7 @@ fn persisted_path(raw: &str) -> String {
 }
 
 /// The active workspace folder OpenCode / the kernel / previews / provenance all
-/// operate in. Defaults to the base folder (`~/Documents/OpenScience`) until the
+/// operate in. Defaults to the base folder (`~/Documents/ChemScienceWorkbench`) until the
 /// user opens or creates another one; the choice persists across restarts.
 ///
 /// The active folder is returned as it is. It is NOT given the base layout:
@@ -159,7 +159,7 @@ pub fn workspace_dir(env: &Env) -> Result<PathBuf, String> {
 }
 
 /// The workspace root containing the `projects/` and `sessions/` collections.
-/// A folder the user picked in Settings wins; the default is `~/Documents/OpenScience`
+/// A folder the user picked in Settings wins; the default is `~/Documents/ChemScienceWorkbench`
 /// (no space — the agent runs shell commands against this path, and unquoted
 /// spaces break them), falling back to `$HOME/Documents`.
 ///
@@ -193,20 +193,9 @@ pub fn base_workspace_dir(env: &Env) -> Result<PathBuf, String> {
             PathBuf::from(home).join("Documents")
         }
     };
-    let dir = docs.join("OpenScience");
-
-    // One-time migrations, oldest name last. A failed rename (e.g. cross-volume)
-    // keeps the existing location rather than splitting the user's files.
-    if !dir.exists() {
-        for old in [docs.join("Open Science"), runtime_root(env)?.join("workspace")] {
-            if old.is_dir() {
-                if std::fs::rename(&old, &dir).is_ok() {
-                    break;
-                }
-                return ensure_base_layout(old);
-            }
-        }
-    }
+    // This fork must never adopt or rename an upstream installation's files.
+    // Existing projects may still be imported explicitly through the UI.
+    let dir = docs.join("ChemScienceWorkbench");
     ensure_base_layout(dir)
 }
 
@@ -400,7 +389,7 @@ fn auth_has_provider(text: &str, provider_id: &str) -> bool {
 /// Deploy the bundled skill packs (Tauri resources) into the app-private
 /// profile's global skills dir (`<xdg-config>/opencode/skills/`), which OpenCode
 /// scans regardless of project detection: `skills/` is the external ai4s-skills
-/// pack, `skills-office/` Anthropic's document skills (docx/pdf/pptx/xlsx),
+/// pack, `skills-office/` our independently authored document tools,
 /// `skills-agent-browser/` the version-matched official agent-browser skill,
 /// `skills-core/` the first-party skills from `runtime/skills/core`. The
 /// workspace's own `.opencode/skills/` stays reserved for skills the user
@@ -1967,7 +1956,7 @@ pub fn workspace_path(env: &Env) -> Result<String, String> {
     Ok(workspace_dir(env)?.to_string_lossy().to_string())
 }
 
-/// The base folder containing projects and sessions (`~/Documents/OpenScience`).
+/// The base folder containing projects and sessions (`~/Documents/ChemScienceWorkbench`).
 pub fn workspace_base(env: &Env) -> Result<String, String> {
     Ok(base_workspace_dir(env)?.to_string_lossy().to_string())
 }
@@ -2157,6 +2146,28 @@ mod tests {
     };
     use std::fs;
     use std::path::PathBuf;
+
+    #[test]
+    fn fork_workspace_does_not_migrate_upstream_data() {
+        let root = std::env::temp_dir().join(format!("chem-coexist-{}", random_hex(8)));
+        let docs = root.join("Documents");
+        let state = root.join("state");
+        let originals = [docs.join("Open Science"), docs.join("OpenScience"), state.join("workspace")];
+        for original in &originals {
+            fs::create_dir_all(original).unwrap();
+            fs::write(original.join("keep.txt"), "upstream data").unwrap();
+        }
+        let env = crate::env::Env::new(state, root.join("resources"), Some(docs.clone()), "0.0.0".into());
+        let base = base_workspace_dir(&env).unwrap();
+        assert_eq!(base, docs.join("ChemScienceWorkbench"));
+        assert!(base.join("projects").is_dir());
+        assert!(base.join("sessions").is_dir());
+        assert!(!base.join("keep.txt").exists());
+        for original in &originals {
+            assert_eq!(fs::read_to_string(original.join("keep.txt")).unwrap(), "upstream data");
+        }
+        fs::remove_dir_all(root).unwrap();
+    }
 
     /// The rule stated above `quiet_command`, enforced. A raw `Command::new` in
     /// shipped code opens a console window on Windows — 0.4.0 shipped one that
@@ -2657,7 +2668,7 @@ mod tests {
         }
         fs::create_dir_all(dir.join("runtime")).unwrap();
         // The base is pointed somewhere temporary first: without that record this
-        // would fall through to the real `~/Documents/OpenScience`.
+        // would fall through to the real `~/Documents/ChemScienceWorkbench`.
         set_workspace_base(&env, base.to_string_lossy().to_string()).unwrap();
         fs::write(
             dir.join("runtime/active-workspace.txt"),

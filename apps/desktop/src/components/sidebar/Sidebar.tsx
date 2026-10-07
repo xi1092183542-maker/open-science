@@ -694,7 +694,7 @@ export function Sidebar({ project }: { project: Project }) {
                 <img src={logo} alt="" />
               </span>
               {/* eslint-disable-next-line i18next/no-literal-string -- product brand name, not translated across locales (see AGENTS.md) */}
-              <span className={css.brandName}>Open Science</span>
+              <span className={css.brandName}>Chem Science</span>
             </span>
           </div>
           {!overlayTitlebar && collapseToggle}

@@ -1,6 +1,6 @@
 use serde::Serialize;
 
-const RELEASES_ATOM_URL: &str = "https://github.com/ai4s-research/open-science/releases.atom";
+const RELEASES_ATOM_URL: Option<&str> = None; // Fork has no publishing channel yet.
 
 #[derive(Debug, Clone, Serialize, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
@@ -19,11 +19,12 @@ pub async fn latest_release() -> Result<ReleaseInfo, String> {
 }
 
 fn fetch_latest_release() -> Result<ReleaseInfo, String> {
+    let url = RELEASES_ATOM_URL.ok_or("This development build has no update channel; upstream releases are not updates for this fork.")?;
     let body = reqwest::blocking::Client::builder()
         .user_agent("Open Science Desktop update checker")
         .build()
         .map_err(|e| format!("could not create HTTP client: {e}"))?
-        .get(RELEASES_ATOM_URL)
+        .get(url)
         .send()
         .and_then(|r| r.error_for_status())
         .map_err(|e| format!("could not fetch GitHub releases feed: {e}"))?

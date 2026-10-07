@@ -1,0 +1,34 @@
+{
+  "opencode.zip": {
+    "url": "https://github.com/anomalyco/opencode/releases/download/v1.18.32/opencode-windows-x64.zip",
+    "sha256": "1483c72d5adced825590a0ecf8cc18b3e87e535960a125dbf539d33bce135d0f"
+  },
+  "uv.zip": {
+    "url": "https://github.com/astral-sh/uv/releases/download/0.11.26/uv-x86_64-pc-windows-msvc.zip",
+    "sha256": "4e1278ede866be6c0bf32d2f466cc6de7a9fb399ecf20c9ce2d186e52424be47"
+  },
+  "agent-browser.exe": {
+    "url": "https://github.com/vercel-labs/agent-browser/releases/download/v0.32.1/agent-browser-win32-x64.exe",
+    "sha256": "ff419b70fdea810d9f991020694dd436ae5f35f7807ed2e5e743daa0f3e13a2b"
+  },
+  "agent-browser.tar.gz": {
+    "url": "https://codeload.github.com/vercel-labs/agent-browser/tar.gz/refs/tags/v0.32.1",
+    "sha256": "a63703b7a38f695df69f7a5dc25f0762ea32b0ca6794ae830b1591b7217c649c"
+  },
+  "ai4s-skills.tar.gz": {
+    "url": "https://codeload.github.com/ai4s-research/ai4s-skills/tar.gz/2519e8d11fd49429fb41d39c2f35b7d453814b11",
+    "sha256": "0b53a7f3e21c812abff46672ee9036acb152a207725b50133b5fead7f53f0717"
+  },
+  "opencode-LICENSE.txt": {
+    "url": "https://raw.githubusercontent.com/anomalyco/opencode/v1.18.32/LICENSE",
+    "sha256": "625f0f619133f89bbbb2abe37369613dfa1885eba1e50d02170deb62bb42cb6b"
+  },
+  "uv-LICENSE-MIT.txt": {
+    "url": "https://raw.githubusercontent.com/astral-sh/uv/0.11.26/LICENSE-MIT",
+    "sha256": "860e3d7a86b84e6a7012c7a635fc64df475cebc6cce34dfeb73a5982ec58176c"
+  },
+  "uv-LICENSE-APACHE.txt": {
+    "url": "https://raw.githubusercontent.com/astral-sh/uv/0.11.26/LICENSE-APACHE",
+    "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+  }
+}

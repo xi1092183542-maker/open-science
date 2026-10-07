@@ -1,0 +1,9 @@
+{
+  "name": "chem-science-goal-runtime",
+  "private": true,
+  "version": "0.1.0",
+  "dependencies": {
+    "@prevalentware/opencode-goal-plugin": "0.1.24",
+    "@opencode-ai/plugin": "1.18.32"
+  }
+}

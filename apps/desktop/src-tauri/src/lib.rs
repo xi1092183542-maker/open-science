@@ -25,6 +25,9 @@ mod runtime;
 mod session_sync;
 mod science_mcp;
 mod ssh_session;
+// Upstream provider-quota readers are retained for reference/parser tests only.
+// They read other CLIs' credentials and must not be callable in this fork.
+#[cfg(test)]
 mod plan_usage;
 mod status_bar;
 mod terminal;
@@ -119,10 +122,8 @@ pub fn run() {
             }
             // Bring the remote-access gateway back up if the user left it enabled.
             gateway::autostart(app.handle());
-            // Make `osd` work in a terminal without the user arranging anything:
-            // the binary is already in this bundle, so all this does is put a
-            // wrapper where PATH can find it. Off the main thread and idempotent.
-            cli_shim::install_on_launch();
+            // CLI installation is explicit in this development fork. Startup
+            // must not modify shell profiles or the user's PATH.
             Ok(())
         })
         // The transparent + vibrancy window loses tao's traffic-light inset on
@@ -263,7 +264,6 @@ pub fn run() {
             ssh_session::ssh_disconnect,
             ssh_session::ssh_sessions,
             ssh_session::ssh_sharing_supported,
-            plan_usage::plan_usage,
             status_bar::system_resources,
             status_bar::listening_ports,
             status_bar::awake_hold,

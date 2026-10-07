@@ -1,31 +1,16 @@
-// `osd` on the user's PATH, without the user doing anything.
-//
-// The installer carries `osd` beside the app binary, so a fresh install already
-// has the terminal client — it is just not reachable by name. Making it
-// reachable happens on launch, not on a button: an install that leaves you a
-// line to paste into your shell profile has not installed anything.
-//
-// Two things shape how it is done. First, what gets written is a WRAPPER, never
-// a symlink: `osd` resolves its sidecars and bundled resources next to its own
-// executable, and macOS does not resolve a symlink for `current_exe()` —
-// measured, a symlinked `osd` dies with "bundled OpenCode binary not found".
-// Second, the directory is chosen to avoid touching the user's files at all
-// where possible: a directory of theirs that is ALREADY on PATH and writable
-// takes it with no further change. Only when there is none does this fall back
-// to `~/.local/bin` plus one guarded block in the login profile (Unix) or one
-// read-modify-write of the per-user PATH (Windows) — never an admin prompt,
-// never `setx` (which truncates a PATH over 1024 characters).
+// The optional chem-osd wrapper points to this installation's bundled osd.
+// Installation is explicitly requested in Settings; app startup never edits PATH.
 use std::path::{Path, PathBuf};
 
 use serde::Serialize;
 
 /// Marks a wrapper as ours, so a re-install overwrites our own file and never
 /// somebody else's `osd`.
-const SIGNATURE: &str = "Open Science Desktop CLI wrapper";
+const SIGNATURE: &str = "Chem Science Workbench CLI wrapper";
 
 /// Delimits the block appended to a shell profile, so it is found again and
 /// written exactly once.
-const PROFILE_MARKER: &str = "# Open Science Desktop: put the osd command on PATH";
+const PROFILE_MARKER: &str = "# Chem Science Workbench: put the chem-osd command on PATH";
 
 /// How `osd` became reachable.
 #[derive(Serialize, PartialEq, Debug, Clone, Copy)]
@@ -72,9 +57,9 @@ fn home() -> Result<PathBuf, String> {
 
 fn shim_name() -> &'static str {
     if cfg!(windows) {
-        "osd.cmd"
+        "chem-osd.cmd"
     } else {
-        "osd"
+        "chem-osd"
     }
 }
 
@@ -200,8 +185,7 @@ fn wrapper_script(binary: &Path) -> String {
              rem {SIGNATURE}. A wrapper, not a symlink: osd finds its sidecars\r\n\
              rem and bundled resources next to the real executable.\r\n\
              if not exist \"{path}\" (\r\n\
-             echo Open Science Desktop is no longer installed; removing this leftover osd command. 1>&2\r\n\
-             del \"%~f0\" >nul 2>&1\r\n\
+             echo Chem Science Workbench is no longer installed; reinstall it or remove this chem-osd wrapper. 1>&2\r\n\
              exit /b 127\r\n\
              )\r\n\
              \"{path}\" %*\r\n"
@@ -213,7 +197,7 @@ fn wrapper_script(binary: &Path) -> String {
              # bundled resources next to the real executable, and macOS does not\n\
              # resolve a symlink for current_exe().\n\
              if [ ! -x \"{path}\" ]; then\n\
-             \techo \"Open Science Desktop is no longer installed; removing this leftover osd command.\" >&2\n\
+             \techo \"Chem Science Workbench is no longer installed; removing this leftover chem-osd command.\" >&2\n\
              \trm -f -- \"$0\"\n\
              \texit 127\n\
              fi\n\
@@ -449,24 +433,8 @@ fn install() -> Result<CliShimStatus, String> {
     Ok(status_for(Some(binary), &shim, route, profile))
 }
 
-/// Called once per launch, off the main thread: after installing the app, `osd`
-/// works in a new terminal without the user having asked for it. Idempotent,
-/// and silent about everything except a genuine failure.
-pub fn install_on_launch() {
-    std::thread::spawn(|| match install() {
-        Ok(status) => {
-            if status.route == PathRoute::Unreachable {
-                eprintln!("osd installed at {} but not on PATH", status.shim);
-            }
-        }
-        // A dev build carries no `osd`; that is not worth a line in the log.
-        Err(e) if e.starts_with("this build") => {}
-        Err(e) => eprintln!("could not install the osd command: {e}"),
-    });
-}
-
 /// Where the command is, how it is reachable, and what was touched to make it
-/// so. Reads only — the launch hook and the button do the writing.
+/// so. Reads only — only the explicit Settings action writes.
 #[tauri::command]
 pub fn cli_shim_status() -> Result<CliShimStatus, String> {
     let dir = shim_dir()?;
@@ -505,8 +473,7 @@ pub fn cli_shim_status() -> Result<CliShimStatus, String> {
     Ok(status_for(bundled_osd(), &shim, route, profile))
 }
 
-/// Repair or redo the install by hand — for a copy of the app that moved, or a
-/// launch whose automatic attempt failed.
+/// Explicitly install or repair the optional terminal wrapper.
 #[tauri::command]
 pub fn install_cli_shim() -> Result<CliShimStatus, String> {
     install()
@@ -515,6 +482,26 @@ pub fn install_cli_shim() -> Result<CliShimStatus, String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[cfg(windows)]
+    #[test]
+    fn windows_wrapper_reports_missing_app_without_changing_other_commands() {
+        let dir = tmp("windows missing app");
+        let shim = dir.join(shim_name());
+        let other = dir.join("osd.cmd");
+        std::fs::write(&other, "@echo upstream wrapper").unwrap();
+        std::fs::write(&shim, wrapper_script(&dir.join("missing/osd.exe"))).unwrap();
+        let result = osd_core::runtime::quiet_command("cmd.exe")
+            .current_dir(&dir)
+            .args(["/d", "/c"])
+            .arg(shim_name())
+            .output()
+            .unwrap();
+        assert_eq!(result.status.code(), Some(127), "{}", String::from_utf8_lossy(&result.stderr));
+        assert!(shim.exists(), "cmd.exe must retain the script until it has returned its exit code");
+        assert_eq!(std::fs::read_to_string(other).unwrap(), "@echo upstream wrapper");
+        std::fs::remove_dir_all(dir).unwrap();
+    }
 
     /// None of these tests touch HOME, SHELL or PATH. An earlier version did,
     /// and process-wide environment changes broke unrelated tests running in
@@ -630,6 +617,7 @@ mod tests {
         std::fs::remove_dir_all(&home).unwrap();
     }
 
+    #[cfg(unix)]
     #[test]
     fn a_wrapper_whose_app_is_gone_says_so_and_removes_itself() {
         // Uninstalling cannot reach a per-user file in $HOME, so the leftover

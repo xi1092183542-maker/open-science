@@ -1,5 +1,7 @@
 # Progress
 
+2026-10-07 22:40 · Windows fork baseline: isolated identity/workspace/CLI/browser namespace, independent Office exporter, 230 core and 90 desktop tests passed, Windows debug app and NSIS package built; startup exposed upstream external CLI usage/credential reads, now removed from production entry points and covered by 46 frontend checks; clean-machine and full distribution-license verification remain pending.
+
 2026-10-04 14:45 · v0.6.0 published (tag 2c49fdc, re-cut to include #148/#149/#150/#153; Zenodo DOI 10.5281/zenodo.23138229, synced to CITATION.cff and all seven READMEs). Two release gotchas: notarization 403 "agreement missing or expired" means the Apple developer agreement must be re-accepted by the Account Holder, not a code issue; and the scheduled finalize-macos-notarization run fires far less often than its cron, so `gh workflow run finalize-macos-notarization.yml` turns `.submitted.*` into the final DMGs on demand.
 
 2026-09-30 09:38 · feat(ui): ① 聊天与终端里的 URL 和本机确实存在的路径可点（仿 Orca）：悬停下划线，单击弹菜单（顶部完整路径；打开文件 ⌘点击→新屏幕显示内容，.ipynb 走笔记本；用默认应用打开 ⇧⌘点击；复制路径/链接），URL 为打开链接/复制。聊天覆盖行内代码与 Markdown 链接，终端用 xterm linkProvider（按单元格映射兼容中文宽字符，相对路径按终端当前目录解析）。后端新增仅桌面可用的 home 文件范围（osd-core scope_root "home"、locate_local + 单测、locate_local_path 命令、预览服务器 h 作用域），网关 fs_base 显式拒绝 home，Web 端不开放。② 屏幕只有一个窗格时，会话头部与终端头部默认隐藏、悬停/聚焦/菜单打开时显示（连接异常或侧栏按钮在头部时不隐藏）；终端头部去掉下边线。tsc、eslint、1681 前端测试通过；osd-core 新测试通过，另有 3 个既有失败（model_probe×2、runtime 启动，改动前同样失败）；DMG 已打，待实机验收。

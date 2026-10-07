@@ -12,7 +12,7 @@ use std::io::{self, BufRead, BufReader, Write};
 use std::process::Stdio;
 
 pub const PROXY_FLAG: &str = "--browser-mcp";
-const BROWSER_NAMESPACE: &str = "open-science-desktop";
+const BROWSER_NAMESPACE: &str = "chem-science-workbench-dev";
 const LEASE_PREFIX: &str = "osd-";
 const INVENTORY_TOOL: &str = "agent_browser_inventory";
 
