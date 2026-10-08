@@ -5,7 +5,8 @@ param(
     [string]$NodeDirectory,
     [string]$BuildDirectory,
     [switch]$SkipInstall,
-    [switch]$Installer
+    [switch]$Installer,
+    [ValidateSet('internal', 'public')][string]$DistributionPurpose = 'internal'
 )
 $ErrorActionPreference = 'Stop'
 $root = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../..'))
@@ -63,6 +64,7 @@ try {
     if ($Configuration -eq 'Release') { $cargoArgs += '--release' }
     Invoke-Checked 'cargo' $cargoArgs
     Invoke-Checked 'python' @('scripts/dev/collect-distribution-notices.py')
+    Invoke-Checked 'python' @('scripts/dev/check-distribution.py', '--purpose', $DistributionPurpose)
     $profile = $Configuration.ToLowerInvariant()
     Copy-Item -LiteralPath (Join-Path $env:CARGO_TARGET_DIR "$profile/osd.exe") -Destination 'apps/desktop/src-tauri/binaries/osd-x86_64-pc-windows-msvc.exe'
     $tauriArgs = @('--filter', '@ai4s/desktop', 'exec', 'tauri', 'build', '--ci', '--config', (Join-Path $PSScriptRoot 'tauri-prebuilt.json'))

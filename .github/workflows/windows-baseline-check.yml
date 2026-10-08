@@ -29,6 +29,13 @@ jobs:
       - name: Build with locked dependencies
         shell: powershell
         run: ./scripts/dev/build-windows.ps1 -Installer -BuildDirectory ../.build/target
+      - name: Distribution integrity and refusal checks
+        shell: powershell
+        run: |
+          python -m unittest discover -s scripts/dev -p test_distribution_check.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python scripts/dev/check-distribution.py --purpose internal
+          exit $LASTEXITCODE
       - name: Core and desktop tests
         shell: powershell
         run: |

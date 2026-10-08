@@ -1,5 +1,7 @@
 # Progress
 
+2026-10-08 23:34 · Verified identical react-remove-scroll-bar 2.3.7/2.3.8 package code and publisher-added MIT text, reducing missing notices to two; staged 574 components/863 notice-source files passed integrity checks; added internal/public distribution checks with seven regression tests and blocked the inherited release workflow without clearance; no new installer or public release produced.
+
 2026-10-08 11:19 · Reproduced and fixed silent NSIS downgrade bypass with an independent preinstall version check; full installer-fixture upgrade/launch/rejection/uninstall passed with exit 2 on downgrade and retained workspace state/helpers; added publisher's unchanged-source MIT notice, reducing missing notices to three, while recording unresolved PPTX publisher terms; application migrations and clean-OS verification remain untested.
 
 2026-10-08 10:51 · Pinned Node 24.15.0; 1,680 frontend tests and lint passed; recorded 574 distribution components and verified 861 installed notice/source files; fixed NSIS 32-bit PowerShell helper cleanup and passed actual Windows 10 install/start/repair/uninstall with retained test data and sibling-process isolation; clean-OS, cross-version upgrades, and distribution-license clearance remain pending.

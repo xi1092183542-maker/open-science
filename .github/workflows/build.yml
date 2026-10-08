@@ -47,6 +47,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # The inherited release workflow is not a cleared fork distribution path.
+      # No release-capable step may run without verified, staged evidence.
+      # Fresh checkouts currently lack it and intentionally fail closed here;
+      # use windows-baseline-check.yml for internal verification.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Require public distribution clearance
+        run: python scripts/dev/check-distribution.py --purpose public
+
       - name: Install Linux system dependencies
         if: startsWith(matrix.platform, 'ubuntu')
         run: |

@@ -166,5 +166,13 @@
     "sha256": "f51aa7a410f3d3ff9352a5422b76c072588ac76b63861f59447502caeacacc16",
     "revisionEvidence": "Publisher added LICENSE after release. GitHub compare from npm gitHead ce46022f537ef9b050fac592f9fcc30bf838e5ba to a2659e6eac3603ba8b46958e0bd35b337108261f changes only LICENSE; release source is otherwise identical.",
     "declaredLicense": "MIT"
+  },
+  {
+    "component": "npm:react-remove-scroll-bar@2.3.8",
+    "path": "upstream/theKashey_react-remove-scroll-bar-7301c160fda4-LICENSE",
+    "url": "https://raw.githubusercontent.com/theKashey/react-remove-scroll-bar/7301c160fda44cb8cf2b9fdfde61efad35736196/LICENSE",
+    "sha256": "a79aae0c0f21990d9d963bb3c5a79cdcea9a46f8523ba55c58d7fe776b6ebc84",
+    "revisionEvidence": "Publisher added LICENSE at 7301c160fda44cb8cf2b9fdfde61efad35736196; comparison with npm 2.3.7 gitHead 29e9fcd1eecf7d3b77a767941c4a57fe461fc1e4 changes only LICENSE. Official npm 2.3.7/2.3.8 tarballs verified against registry SHA-512: all files identical except package.json version/dependencies. Dependencies are inventoried separately.",
+    "declaredLicense": "MIT"
   }
 ]
