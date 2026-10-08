@@ -30,10 +30,11 @@ beforeEach(() => {
 });
 
 describe("Settings → the terminal command", () => {
-  it("reports a command the launch already installed, with nothing left to do", async () => {
+  it("reports a previously installed command without installing on render", async () => {
     render(<TerminalCliCard />);
     await waitFor(() => expect(screen.getByText("/Users/x/bin/osd")).toBeInTheDocument());
-    expect(screen.getByText(/Ready — run `osd` in a new terminal/)).toBeInTheDocument();
+    expect(screen.getByText(/Ready — run `chem-osd` in a new terminal/)).toBeInTheDocument();
+    expect(install).not.toHaveBeenCalled();
     // Nothing to paste: PATH already reaches it.
     expect(screen.queryByText(/export PATH=/)).not.toBeInTheDocument();
     // The button is repair, not setup.
@@ -66,12 +67,13 @@ describe("Settings → the terminal command", () => {
     state.current = status({ installed: false });
     render(<TerminalCliCard />);
     await waitFor(() => expect(screen.getByText(/Not installed/)).toBeInTheDocument());
+    expect(install).not.toHaveBeenCalled();
 
     state.current = status({ installed: true });
     await user.click(screen.getByRole("button", { name: "Install command" }));
     expect(install).toHaveBeenCalledOnce();
     await waitFor(() =>
-      expect(screen.getByText(/Ready — run `osd` in a new terminal/)).toBeInTheDocument(),
+      expect(screen.getByText(/Ready — run `chem-osd` in a new terminal/)).toBeInTheDocument(),
     );
   });
 
@@ -89,7 +91,7 @@ describe("Settings → the terminal command", () => {
     state.current = status({ binary: null, installed: false });
     render(<TerminalCliCard />);
     await waitFor(() =>
-      expect(screen.getByText("This build does not carry the osd command.")).toBeInTheDocument(),
+      expect(screen.getByText("This build does not carry the chem-osd command.")).toBeInTheDocument(),
     );
     expect(screen.getByRole("button", { name: "Install command" })).toBeDisabled();
   });

@@ -87,3 +87,5 @@ dist-osd/
 .openscience/
 # Fork-local download and build cache.
 .build-cache/
+# Generated dependency notices and source archives; rebuilt from locked packages.
+runtime/third-party-notices/dependencies/

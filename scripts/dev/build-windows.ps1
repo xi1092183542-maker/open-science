@@ -2,6 +2,7 @@
 param(
     [ValidateSet('Debug', 'Release')][string]$Configuration = 'Debug',
     [string]$PnpmCliPath,
+    [string]$NodeDirectory,
     [string]$BuildDirectory,
     [switch]$SkipInstall,
     [switch]$Installer
@@ -29,13 +30,22 @@ function Invoke-Pnpm([string[]]$Arguments) {
 
 Push-Location $root
 try {
+    if ($NodeDirectory) {
+        $nodePath = (Resolve-Path -LiteralPath $NodeDirectory).Path
+        $env:Path = $nodePath + ';' + $env:Path
+    }
     if ($PnpmCliPath) {
         $PnpmCliPath = (Resolve-Path -LiteralPath $PnpmCliPath).Path
         # Tauri's beforeBuildCommand also invokes pnpm.
         $pnpmBin = Join-Path (Split-Path (Split-Path (Split-Path $PnpmCliPath))) '.bin'
         $env:Path = $pnpmBin + ';' + $env:Path
     }
-    Invoke-Checked 'node' @('--version')
+    $expectedNode = 'v' + (Get-Content -LiteralPath (Join-Path $root '.node-version') -Raw).Trim()
+    $actualNode = & node --version
+    if ($LASTEXITCODE -ne 0 -or $actualNode -ne $expectedNode) {
+        throw "Expected Node $expectedNode, found $actualNode. Use prepare-node.py and -NodeDirectory."
+    }
+    Write-Output "Node $actualNode"
     Invoke-Checked 'cargo' @('--version')
     if (-not $SkipInstall) {
         Invoke-Pnpm @('install', '--frozen-lockfile')
@@ -52,6 +62,7 @@ try {
     $cargoArgs = @('build', '--locked', '-p', 'osd-cli')
     if ($Configuration -eq 'Release') { $cargoArgs += '--release' }
     Invoke-Checked 'cargo' $cargoArgs
+    Invoke-Checked 'python' @('scripts/dev/collect-distribution-notices.py')
     $profile = $Configuration.ToLowerInvariant()
     Copy-Item -LiteralPath (Join-Path $env:CARGO_TARGET_DIR "$profile/osd.exe") -Destination 'apps/desktop/src-tauri/binaries/osd-x86_64-pc-windows-msvc.exe'
     $tauriArgs = @('--filter', '@ai4s/desktop', 'exec', 'tauri', 'build', '--ci', '--config', (Join-Path $PSScriptRoot 'tauri-prebuilt.json'))

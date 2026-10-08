@@ -12,7 +12,7 @@
     "lint": "pnpm --filter @ai4s/desktop lint"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=24.15.0 <25"
   },
   "packageManager": "pnpm@9.4.0",
   "//overrides": {

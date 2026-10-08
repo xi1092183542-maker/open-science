@@ -4,6 +4,7 @@ version.workspace = true
 description = "Open Science Desktop"
 authors = ["AI4S Workbench contributors"]
 edition.workspace = true
+license.workspace = true
 
 [[bin]]
 name = "chem-science-workbench"

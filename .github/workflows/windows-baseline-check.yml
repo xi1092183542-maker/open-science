@@ -1,0 +1,57 @@
+name: Windows baseline verification
+
+# A fresh hosted VM is required before claiming a clean-OS verification.
+# This workflow builds and tests; it never creates or publishes a release.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  baseline:
+    runs-on: windows-2022
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.4.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: '1.99.0'
+      - name: Build with locked dependencies
+        shell: powershell
+        run: ./scripts/dev/build-windows.ps1 -Installer -BuildDirectory ../.build/target
+      - name: Core and desktop tests
+        shell: powershell
+        run: |
+          $env:CARGO_TARGET_DIR = [IO.Path]::GetFullPath('../.build/target')
+          cargo test --locked -p osd-core -p ai4s-workbench --lib
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          pnpm test
+          exit $LASTEXITCODE
+      - name: Desktop smoke test
+        shell: powershell
+        run: ./scripts/dev/smoke-desktop.ps1 -Binary ../.build/target/debug/chem-science-workbench.exe -TestRoot ../.build/smoke-desktop-01
+      - name: Install, repair, and uninstall while retaining data
+        shell: powershell
+        run: |
+          $installer = Get-ChildItem ../.build/target/debug/bundle/nsis/*-setup.exe | Select-Object -First 1
+          ./scripts/dev/test-installer-lifecycle.ps1 -Installer $installer.FullName -TestRoot ../.build/installer-lifecycle
+      - name: Retain verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-baseline-evidence
+          path: |
+            ../.build/installer-lifecycle/*.json
+            ../.build/installer-lifecycle/*.log
+            ../.build/smoke-desktop-01/result.json
+            runtime/third-party-notices/dependencies/index.json

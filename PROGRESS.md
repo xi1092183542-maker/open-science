@@ -1,5 +1,7 @@
 # Progress
 
+2026-10-08 10:51 · Pinned Node 24.15.0; 1,680 frontend tests and lint passed; recorded 574 distribution components and verified 861 installed notice/source files; fixed NSIS 32-bit PowerShell helper cleanup and passed actual Windows 10 install/start/repair/uninstall with retained test data and sibling-process isolation; clean-OS, cross-version upgrades, and distribution-license clearance remain pending.
+
 2026-10-07 22:40 · Windows fork baseline: isolated identity/workspace/CLI/browser namespace, independent Office exporter, 230 core and 90 desktop tests passed, Windows debug app and NSIS package built; startup exposed upstream external CLI usage/credential reads, now removed from production entry points and covered by 46 frontend checks; clean-machine and full distribution-license verification remain pending.
 
 2026-10-04 14:45 · v0.6.0 published (tag 2c49fdc, re-cut to include #148/#149/#150/#153; Zenodo DOI 10.5281/zenodo.23138229, synced to CITATION.cff and all seven READMEs). Two release gotchas: notarization 403 "agreement missing or expired" means the Apple developer agreement must be re-accepted by the Account Holder, not a code issue; and the scheduled finalize-macos-notarization run fires far less often than its cron, so `gh workflow run finalize-macos-notarization.yml` turns `.submitted.*` into the final DMGs on demand.

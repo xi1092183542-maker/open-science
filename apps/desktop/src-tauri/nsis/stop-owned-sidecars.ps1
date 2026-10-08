@@ -3,6 +3,9 @@ param([Parameter(Mandatory = $true)][string]$InstallDir)
 
 $ErrorActionPreference = 'Stop'
 try {
+    if ([Environment]::Is64BitOperatingSystem -and -not [Environment]::Is64BitProcess) {
+        throw 'Helper cleanup requires native 64-bit PowerShell; 32-bit process paths are incomplete.'
+    }
     $root = [IO.Path]::GetFullPath($InstallDir)
     $expected = @('opencode.exe', 'uv.exe', 'agent-browser.exe', 'osd.exe') |
         ForEach-Object { [IO.Path]::Combine($root, $_) }

@@ -1,0 +1,2 @@
+# Preserve upstream license bytes: their SHA-256 values are provenance evidence.
+runtime/third-party-notices/upstream/** -text

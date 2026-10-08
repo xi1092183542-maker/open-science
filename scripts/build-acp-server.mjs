@@ -10,7 +10,7 @@
 // webview.
 import { build } from "esbuild";
 import { mkdir, writeFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
+import { dirname, resolve, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -30,7 +30,7 @@ await writeFile(
   ].join("\n"),
 );
 
-await build({
+const result = await build({
   entryPoints: [entry],
   outfile: resolve(outDir, "acp-server.mjs"),
   bundle: true,
@@ -50,6 +50,12 @@ await build({
     js: "console.log = console.error;",
   },
   logLevel: "warning",
+  metafile: true,
 });
+
+await writeFile(resolve(outDir, "distribution-inputs.json"), JSON.stringify({
+  schema: 1,
+  modules: Object.keys(result.metafile.inputs).map(name => relative(root, resolve(name)).replaceAll("\\", "/")).sort(),
+}, null, 2) + "\n");
 
 process.stdout.write(`acp-server bundled → ${resolve(outDir, "acp-server.mjs")}\n`);

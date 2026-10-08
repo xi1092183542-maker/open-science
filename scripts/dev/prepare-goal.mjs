@@ -17,6 +17,10 @@ const bundled = await build({
   metafile: true,
 });
 await cp(path.join(source, "LICENSE"), path.join(output, "LICENSE"));
+await writeFile(path.join(output, "distribution-inputs.json"), JSON.stringify({
+  schema: 1,
+  modules: Object.keys(bundled.metafile.inputs).map(name => path.relative(root, path.resolve(name)).replaceAll("\\", "/")).sort(),
+}, null, 2) + "\n");
 // Preserve notices for packages whose code esbuild embeds in the single file.
 const { existsSync, readdirSync } = await import("node:fs");
 const seen = new Set();

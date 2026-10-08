@@ -28,11 +28,18 @@
   ; Match exact installation paths and current-user ownership before stopping.
   InitPluginsDir
   File /oname=$PLUGINSDIR\stop-owned-sidecars.ps1 "${CHEM_HOOK_DIR}\stop-owned-sidecars.ps1"
-  nsExec::ExecToStack '"$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "$PLUGINSDIR\stop-owned-sidecars.ps1" -InstallDir "$INSTDIR"'
+  ; NSIS is 32-bit. System32 redirects to SysWOW64, whose Get-Process.Path
+  ; returns null for 64-bit helpers. Sysnative reaches the native host.
+  ${If} ${RunningX64}
+    nsExec::ExecToStack '"$WINDIR\Sysnative\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "$PLUGINSDIR\stop-owned-sidecars.ps1" -InstallDir "$INSTDIR"'
+  ${Else}
+    nsExec::ExecToStack '"$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "$PLUGINSDIR\stop-owned-sidecars.ps1" -InstallDir "$INSTDIR"'
+  ${EndIf}
   Pop $0
   Pop $1
   ${If} $0 != 0
     DetailPrint "$1"
+    SetErrorLevel 1
     Abort "Could not stop this installation's helpers. Close Chem Science Workbench and retry."
   ${EndIf}
 !macroend

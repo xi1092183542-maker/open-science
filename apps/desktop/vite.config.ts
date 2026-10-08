@@ -1,13 +1,31 @@
 /// <reference types="vitest/config" />
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import { fileURLToPath } from "node:url";
+import path from "node:path";
 import pkg from "./package.json";
 
 const r = (p: string) => fileURLToPath(new URL(p, import.meta.url));
 
+// Record actual module inputs, including fonts/assets. Installed dependency
+// metadata alone cannot distinguish browser code from unused Node packages.
+function distributionInputs(): Plugin {
+  const root = r("../..");
+  return {
+    name: "distribution-inputs",
+    apply: "build",
+    generateBundle() {
+      const modules = [...this.getModuleIds()]
+        .filter((id) => !id.startsWith("\0") && path.isAbsolute(id.split("?")[0]))
+        .map((id) => path.relative(root, id.split("?")[0]).split("\\").join("/"));
+      this.emitFile({ type: "asset", fileName: "distribution-inputs.json",
+        source: JSON.stringify({ schema: 1, modules: [...new Set(modules)].sort() }, null, 2) + "\n" });
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), distributionInputs()],
   define: {
     __APP_VERSION__: JSON.stringify(pkg.version),
   },
