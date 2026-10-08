@@ -47,6 +47,7 @@
       "minimumSystemVersion": "13.0"
     },
     "windows": {
+      "allowDowngrades": false,
       "nsis": {
         "installMode": "currentUser",
         "installerHooks": "nsis/hooks.nsh",

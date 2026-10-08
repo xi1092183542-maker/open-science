@@ -1,0 +1,13 @@
+[
+  {
+    "component": "npm:pptx-preview@1.0.7",
+    "status": "unresolved-publisher-terms-conflict",
+    "packageMetadataLicense": "ISC",
+    "packageMetadataUrl": "https://registry.npmjs.org/pptx-preview/1.0.7",
+    "publishedGitHead": "925c5ee8816ddf2dec640d99bef7a2c01fde9974",
+    "repositoryTermsUrl": "https://github.com/501351981/pptx-preview/blob/b9bb0460a426ffe155487ee124ad9d57fd9c4c51/LICENSE",
+    "repositoryTermsSummary": "Allows free personal/commercial use of the npm package, but restricts source to personal learning and forbids internet publication and modified open-source redistribution.",
+    "assessment": "The relationship between these repository terms and the published npm version is unresolved. This is not evidence that current repository terms retroactively replace an earlier grant.",
+    "requiredResolution": "Obtain verifiable terms for the published version or replace the component before public redistribution; do not infer clearance from the npm ISC label."
+  }
+]

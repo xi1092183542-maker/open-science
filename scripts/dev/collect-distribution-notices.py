@@ -57,6 +57,8 @@ def main():
     locks = {(p["name"], p["version"]): p for p in tomllib.loads((ROOT / "Cargo.lock").read_text(encoding="utf8"))["package"]}
     fallback_path = ROOT / "scripts/dev/notice-fallbacks.json"
     fallbacks = json.loads(fallback_path.read_text(encoding="utf8")) if fallback_path.exists() else []
+    review_path = ROOT / "scripts/dev/license-review-issues.json"
+    review_issues = json.loads(review_path.read_text(encoding="utf8"))
     components = {}
     prebundled = []
 
@@ -155,6 +157,7 @@ def main():
     result = {"schema": 1, "scope": "Observed JS modules, packaged SDK tree, and conservative Windows Cargo dependency superset",
               "distributionCleared": False, "components": list(components.values()),
               "missingNoticeFiles": missing, "prebundledJavaScript": prebundled,
+              "licenseReviewIssues": review_issues,
               "remainingReview": ["Downloaded sidecar executable internals", "Prebundled JavaScript nested license coverage",
                                   "Non-code assets and manual upstream attributions", "Runtime Python dependencies installed by users"]}
     (OUTPUT / "index.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf8")

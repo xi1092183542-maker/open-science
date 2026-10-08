@@ -47,6 +47,29 @@
 ; Runs at the top of Section Install, before CheckIfAppIsRunning and before the
 ; first `File` write -- so every helper is gone by the time anything is copied.
 !macro NSIS_HOOK_PREINSTALL
+  ; The upstream silent path skips PageReinstall, so its $R0 downgrade
+  ; comparison is never initialized. Read and compare independently before
+  ; stopping helpers or writing any payload files.
+  !if "${ALLOWDOWNGRADES}" == "false"
+    Push $0
+    Push $1
+    ReadRegStr $0 SHCTX "${UNINSTKEY}" "DisplayVersion"
+    ${If} $0 != ""
+      nsis_tauri_utils::SemverCompare "${VERSION}" "$0"
+      Pop $1
+      ${If} $1 == -1
+        DetailPrint "A newer version ($0) is installed. Downgrade refused."
+        SetErrorLevel 2
+        Abort "A newer version is installed. Downgrade refused."
+      ${ElseIf} $1 != 0
+      ${AndIf} $1 != 1
+        SetErrorLevel 1
+        Abort "Could not compare installed version. Installation refused."
+      ${EndIf}
+    ${EndIf}
+    Pop $1
+    Pop $0
+  !endif
   !insertmacro KillAllSidecars
 !macroend
 

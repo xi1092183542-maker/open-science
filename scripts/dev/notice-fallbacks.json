@@ -158,5 +158,13 @@
     "sha256": "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04",
     "revisionEvidence": "selectors 0.36.1 Cargo metadata and lib.rs explicitly name MPL 2.0; complete unmodified source archive is also bundled",
     "declaredLicense": "MPL-2.0"
+  },
+  {
+    "component": "npm:html-parse-stringify@3.0.1",
+    "path": "upstream/HenrikJoreteg_html-parse-stringify-a2659e6eac36-LICENSE",
+    "url": "https://raw.githubusercontent.com/HenrikJoreteg/html-parse-stringify/a2659e6eac3603ba8b46958e0bd35b337108261f/LICENSE",
+    "sha256": "f51aa7a410f3d3ff9352a5422b76c072588ac76b63861f59447502caeacacc16",
+    "revisionEvidence": "Publisher added LICENSE after release. GitHub compare from npm gitHead ce46022f537ef9b050fac592f9fcc30bf838e5ba to a2659e6eac3603ba8b46958e0bd35b337108261f changes only LICENSE; release source is otherwise identical.",
+    "declaredLicense": "MIT"
   }
 ]

@@ -40,11 +40,13 @@ jobs:
       - name: Desktop smoke test
         shell: powershell
         run: ./scripts/dev/smoke-desktop.ps1 -Binary ../.build/target/debug/chem-science-workbench.exe -TestRoot ../.build/smoke-desktop-01
-      - name: Install, repair, and uninstall while retaining data
+      - name: Build installer version fixtures from the same application payload
+        shell: powershell
+        run: ./scripts/dev/build-installer-upgrade-fixture.ps1 -BuildDirectory ../.build/target -OutputDirectory ../.build/upgrade-fixtures
+      - name: Install, repair, upgrade, reject downgrade, and uninstall
         shell: powershell
         run: |
-          $installer = Get-ChildItem ../.build/target/debug/bundle/nsis/*-setup.exe | Select-Object -First 1
-          ./scripts/dev/test-installer-lifecycle.ps1 -Installer $installer.FullName -TestRoot ../.build/installer-lifecycle
+          ./scripts/dev/test-installer-lifecycle.ps1 -Installer ../.build/upgrade-fixtures/base-setup.exe -UpgradeFixtureManifest ../.build/upgrade-fixtures/fixture-manifest.json -TestRoot ../.build/installer-lifecycle
       - name: Retain verification evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -54,4 +56,5 @@ jobs:
             ../.build/installer-lifecycle/*.json
             ../.build/installer-lifecycle/*.log
             ../.build/smoke-desktop-01/result.json
+            ../.build/upgrade-fixtures/fixture-manifest.json
             runtime/third-party-notices/dependencies/index.json
