@@ -1,0 +1,16 @@
+[
+  {
+    "parent": "npm:@aiden0z/pptx-renderer@1.3.0",
+    "directory": "upstream/mtx-decompressor-1.4.2",
+    "name": "mtx-decompressor",
+    "version": "1.4.2",
+    "license": "MPL-2.0",
+    "repository": "https://github.com/ChristopherVR/mtx-decompressor",
+    "sourceArchive": {
+      "path": "source.tar.gz",
+      "sha256": "eaecf2e69ad32239d9689f7526acd29b90302bedfdbde5d78ca90eb0fe64456b",
+      "url": "https://codeload.github.com/ChristopherVR/mtx-decompressor/tar.gz/23bd175d31f845aafa4674114f7cddabaa82a4e1"
+    },
+    "evidence": "Renderer 1.3.0 THIRD_PARTY_NOTICES.md identifies embedded unmodified 1.4.2; its v1.4.2 Git tag and npm gitHead both resolve to 23bd175d31f845aafa4674114f7cddabaa82a4e1"
+  }
+]

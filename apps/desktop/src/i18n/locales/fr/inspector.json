@@ -128,7 +128,9 @@
     "pptxRenderError": "Impossible d'afficher cette présentation : {{message}}",
     "noSheets": "Ce classeur ne contient aucune feuille.",
     "truncatedPrefix": "Aperçu tronqué · ",
-    "embeddedChartsNote": "Les graphiques intégrés ne sont pas affichés."
+    "embeddedChartsNote": "Les graphiques intégrés ne sont pas affichés.",
+    "pptxPartial": "Certains contenus des diapositives n’ont pas pu être affichés.",
+    "pptxPreviewNote": "Aperçu uniquement. Les polices et les effets peuvent différer ; les animations et certains dessins vectoriels ne sont pas affichés."
   },
   "table": {
     "showingFirstRows_one": "Affichage de la première {{count}} ligne",

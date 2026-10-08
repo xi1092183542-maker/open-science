@@ -1,6 +1,6 @@
 // Inline previews for Office formats, rendered locally (no conversion service):
-// docx via docx-preview (HTML), xlsx via SheetJS sheet_to_html (merged cells
-// kept), pptx via pptx-preview (inline-styled slide list). Each renderer is
+// DOCX uses docx-preview, XLSX uses ExcelJS, and PPTX uses the pinned
+// Apache-licensed @aiden0z/pptx-renderer. Each renderer is
 // dynamic-imported so the heavy libraries stay out of the main bundle.
 //
 // Everything renders inside a Shadow DOM: document content expects plain
@@ -214,10 +214,6 @@ export function XlsxView({ bytes, scrollKey }: { bytes: ArrayBuffer; scrollKey: 
 
 const SLIDES_CSS = `
   .page { padding: 16px; }
-  /* pptx-preview hardcodes a BLACK background on its wrapper — every gap
-     between/around slides showed as black. !important beats the inline style. */
-  .page > div { margin: 0 auto; background: transparent !important; }
-  .page > div > div { margin: 0 auto 16px; box-shadow: 0 1px 4px rgba(0,0,0,.25); }
 `;
 
 export function PptxView({ bytes, scrollKey }: { bytes: ArrayBuffer; scrollKey: string }) {
@@ -226,28 +222,29 @@ export function PptxView({ bytes, scrollKey }: { bytes: ArrayBuffer; scrollKey: 
   const wrapRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  // Reading position, restored when the same deck is reopened.
+  const [partial, setPartial] = useState(false);
   const onScroll = useScrollMemory(wrapRef, scrollKey, !loading);
 
   useEffect(() => {
     if (!page) return;
     let cancelled = false;
-    let previewer: { destroy(): void } | undefined;
+    let preview: { destroy(): void } | undefined;
+    // Each load gets its own mount, so a cancelled async renderer cannot append
+    // old slides into the next document's container.
+    const mount = document.createElement("div");
+    page.append(mount);
+    setLoading(true);
+    setError(null);
+    setPartial(false);
     (async () => {
       try {
-        const [{ init }, { normalizePptxForPreview }] = await Promise.all([
-          import("pptx-preview"),
-          import("@/lib/pptx"),
-        ]);
+        const { createPptxPreview } = await import("@/lib/pptx");
         if (cancelled) return;
-        // Decks styled via paragraph-level defRPr render unstyled (tiny black
-        // text) in pptx-preview — rewrite them into explicit per-run form first.
-        const normalized = await normalizePptxForPreview(bytes);
-        if (cancelled) return;
-        // Fit slides to the pane, with a floor so a collapsed pane stays legible.
-        const width = Math.max((wrapRef.current?.clientWidth ?? 0) - 32, 480);
-        previewer = init(page, { width, mode: "list" });
-        await (previewer as ReturnType<typeof init>).preview(normalized);
+        const session = createPptxPreview(mount, bytes, wrapRef.current ?? undefined, () => {
+          if (!cancelled) setPartial(true);
+        });
+        preview = session;
+        await session.ready;
       } catch (e) {
         if (!cancelled) setError(t("office.pptxRenderError", { message: message(e) }));
       } finally {
@@ -256,17 +253,23 @@ export function PptxView({ bytes, scrollKey }: { bytes: ArrayBuffer; scrollKey: 
     })();
     return () => {
       cancelled = true;
-      previewer?.destroy();
-      page.replaceChildren();
+      preview?.destroy();
+      mount.remove();
     };
-    // `t` intentionally excluded, same reasoning as DocxView above.
+    // Locale changes should not reload the document.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bytes, page]);
 
   return (
-    <div ref={wrapRef} onScroll={onScroll} className="h-full overflow-auto">
-      <RenderState error={error} loading={loading} />
-      <div ref={hostRef} />
+    <div className="flex h-full flex-col">
+      <div ref={wrapRef} onScroll={onScroll} className="min-h-0 flex-1 overflow-auto">
+        <RenderState error={error} loading={loading} />
+        {partial && <div role="status" className="px-4 py-2 text-sm text-muted">{t("office.pptxPartial")}</div>}
+        <div ref={hostRef} />
+      </div>
+      <div className="border-t border-border px-4 py-1.5 text-xs text-muted">
+        {t("office.pptxPreviewNote")}
+      </div>
     </div>
   );
 }

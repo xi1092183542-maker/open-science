@@ -127,7 +127,9 @@
     "pptxRenderError": "このプレゼンテーションをレンダリングできませんでした: {{message}}",
     "noSheets": "このワークブックにはシートがありません。",
     "truncatedPrefix": "省略されたプレビュー · ",
-    "embeddedChartsNote": "埋め込まれたグラフはレンダリングされません。"
+    "embeddedChartsNote": "埋め込まれたグラフはレンダリングされません。",
+    "pptxPartial": "一部のスライド内容を表示できませんでした。",
+    "pptxPreviewNote": "プレビューです。フォントや効果が異なる場合があります。アニメーションや一部のベクター画像は表示されません。"
   },
   "table": {
     "showingFirstRows_other": "最初の {{count}} 行を表示"

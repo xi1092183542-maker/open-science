@@ -128,7 +128,9 @@
     "pptxRenderError": "Diese Präsentation konnte nicht gerendert werden: {{message}}",
     "noSheets": "Diese Arbeitsmappe hat keine Tabellenblätter.",
     "truncatedPrefix": "Gekürzte Vorschau · ",
-    "embeddedChartsNote": "Eingebettete Diagramme werden nicht gerendert."
+    "embeddedChartsNote": "Eingebettete Diagramme werden nicht gerendert.",
+    "pptxPartial": "Einige Folieninhalte konnten nicht angezeigt werden.",
+    "pptxPreviewNote": "Nur Vorschau. Schriftarten und Effekte können abweichen; Animationen und einige Vektorgrafiken werden nicht angezeigt."
   },
   "table": {
     "showingFirstRows_one": "Zeigt die erste {{count}} Zeile",

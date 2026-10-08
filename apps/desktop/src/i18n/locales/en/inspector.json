@@ -128,7 +128,9 @@
     "pptxRenderError": "Could not render this presentation: {{message}}",
     "noSheets": "This workbook has no sheets.",
     "truncatedPrefix": "Truncated preview · ",
-    "embeddedChartsNote": "Embedded charts are not rendered."
+    "embeddedChartsNote": "Embedded charts are not rendered.",
+    "pptxPartial": "Some slide content could not be displayed.",
+    "pptxPreviewNote": "Preview only. Fonts and effects may differ; animations and some vector artwork are not shown."
   },
   "table": {
     "showingFirstRows_one": "Showing the first {{count}} row",

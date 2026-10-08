@@ -127,7 +127,9 @@
     "pptxRenderError": "이 프레젠테이션을 렌더링할 수 없습니다: {{message}}",
     "noSheets": "이 워크북에는 시트가 없습니다.",
     "truncatedPrefix": "잘린 미리보기 · ",
-    "embeddedChartsNote": "포함된 차트는 렌더링되지 않습니다."
+    "embeddedChartsNote": "포함된 차트는 렌더링되지 않습니다.",
+    "pptxPartial": "일부 슬라이드 내용을 표시할 수 없습니다.",
+    "pptxPreviewNote": "미리보기입니다. 글꼴과 효과가 다를 수 있으며 애니메이션과 일부 벡터 이미지는 표시되지 않습니다."
   },
   "table": {
     "showingFirstRows_other": "처음 {{count}}개 행 표시"

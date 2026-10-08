@@ -39,7 +39,8 @@ def notice_files(directory):
         relative = file.relative_to(directory)
         if "node_modules" in relative.parts or file.is_symlink() or not file.is_file():
             continue
-        if NOTICE.match(file.name):
+        if (NOTICE.match(file.name) or file.name.upper() == "THIRD_PARTY_NOTICES.MD"
+                or "licenses" in (part.lower() for part in relative.parts[:-1])):
             yield file
 
 
@@ -109,6 +110,17 @@ def main():
             add("cargo", Path(meta["manifest_path"]).parent, meta,
                 "windows-resolved-dependency-superset-including-build-tools")
 
+    # Prebundled dependencies do not appear in Vite's module graph. Use exact
+    # reviewed declarations, not versions from the separately installed tree.
+    for embedded in json.loads((ROOT / "scripts/dev/embedded-distribution.json").read_text(encoding="utf8")):
+        if embedded["parent"] not in {f"{k}:{n}@{v}" for k, n, v in components}:
+            continue
+        directory = (ROOT / "runtime/third-party-notices" / embedded["directory"]).resolve()
+        if not directory.is_relative_to(ROOT / "runtime/third-party-notices/upstream"):
+            raise ValueError("Embedded source directory escapes reviewed notices")
+        add("npm", directory, embedded, "reviewed-embedded-frontend-component")
+        components[("npm", embedded["name"], embedded["version"])]["embeddedIn"] = embedded["parent"]
+
     OUTPUT.mkdir(parents=True, exist_ok=True)
     missing = []
     for key, record in sorted(components.items()):
@@ -127,6 +139,19 @@ def main():
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(file, target)
             record["notices"].append({"path": target.relative_to(OUTPUT).as_posix(), "sha256": sha(target)})
+        if record["name"] == "@aiden0z/pptx-renderer" and record["version"] == "1.3.0":
+            provenance = directory / "scripts/ooxml-geometry/source-manifest.json"
+            target = folder / "ECMA-source-manifest.json"
+            shutil.copyfile(provenance, target)
+            record["notices"].append({"path": target.relative_to(OUTPUT).as_posix(), "sha256": sha(target)})
+        if meta.get("sourceArchive"):
+            archive = (directory / meta["sourceArchive"]["path"]).resolve()
+            if not archive.is_relative_to(directory) or sha(archive) != meta["sourceArchive"]["sha256"]:
+                raise ValueError("Embedded source archive differs from reviewed evidence")
+            target = folder / archive.name
+            shutil.copyfile(archive, target)
+            record["unmodifiedSourceArchive"] = {"path": target.relative_to(OUTPUT).as_posix(), "sha256": sha(target),
+                                                  "sourceUrl": meta["sourceArchive"]["url"], "evidence": meta["evidence"]}
         if not notices and record["name"] in ("@opencode-ai/plugin", "@opencode-ai/sdk") and record["version"] == "1.18.32":
             source = ROOT / "runtime/third-party-notices/opencode-LICENSE.txt"
             target = folder / "LICENSE.upstream-release.txt"
@@ -157,9 +182,22 @@ def main():
     result = {"schema": 1, "scope": "Observed JS modules, packaged SDK tree, and conservative Windows Cargo dependency superset",
               "distributionCleared": False, "components": list(components.values()),
               "missingNoticeFiles": missing, "prebundledJavaScript": prebundled,
-              "licenseReviewIssues": review_issues,
+              "licenseReviewIssues": [issue for issue in review_issues if issue["component"] in
+                                      {f"{k}:{n}@{v}" for k, n, v in components}],
               "remainingReview": ["Downloaded sidecar executable internals", "Prebundled JavaScript nested license coverage",
                                   "Non-code assets and manual upstream attributions", "Runtime Python dependencies installed by users"]}
+    # This directory contains generated evidence only. Retired dependencies must
+    # not leave obsolete license/source payloads in a later installer.
+    retained = {"index.json"}
+    for record in components.values():
+        retained.update(notice["path"] for notice in record["notices"])
+        if record.get("unmodifiedSourceArchive"):
+            retained.add(record["unmodifiedSourceArchive"]["path"])
+    for file in OUTPUT.rglob("*"):
+        if file.is_file() and file.relative_to(OUTPUT).as_posix() not in retained:
+            if not file.resolve().is_relative_to(OUTPUT.resolve()):
+                raise ValueError("Stale notice path escapes generated directory")
+            file.unlink()
     (OUTPUT / "index.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf8")
     print(json.dumps({"components": len(components), "missingNoticeFiles": missing,
                       "prebundledJavaScript": len(prebundled), "distributionCleared": False}))

@@ -127,7 +127,9 @@
     "pptxRenderError": "无法渲染此演示文稿：{{message}}",
     "noSheets": "此工作簿没有工作表。",
     "truncatedPrefix": "已截断预览 · ",
-    "embeddedChartsNote": "嵌入的图表未被渲染。"
+    "embeddedChartsNote": "嵌入的图表未被渲染。",
+    "pptxPartial": "部分幻灯片内容未能显示。",
+    "pptxPreviewNote": "仅供预览。字体和效果可能存在差异；动画及部分矢量图形不显示。"
   },
   "table": {
     "showingFirstRows_other": "显示前 {{count}} 行"

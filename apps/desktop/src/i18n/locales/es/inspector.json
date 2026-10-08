@@ -128,7 +128,9 @@
     "pptxRenderError": "No se pudo renderizar esta presentación: {{message}}",
     "noSheets": "Este libro de cálculo no tiene hojas.",
     "truncatedPrefix": "Vista previa truncada · ",
-    "embeddedChartsNote": "Los gráficos incrustados no se renderizan."
+    "embeddedChartsNote": "Los gráficos incrustados no se renderizan.",
+    "pptxPartial": "No se pudo mostrar parte del contenido de las diapositivas.",
+    "pptxPreviewNote": "Solo vista previa. Las fuentes y los efectos pueden variar; no se muestran las animaciones ni algunos gráficos vectoriales."
   },
   "table": {
     "showingFirstRows_one": "Mostrando la primera {{count}} fila",
