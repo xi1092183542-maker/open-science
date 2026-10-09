@@ -1,5 +1,7 @@
 # Progress
 
+2026-10-09 11:31 · Rebuilt the Debug Tauri desktop and NSIS installer after the PPTX renderer replacement; isolated Windows lifecycle passed install, installed-app start/close, 868 installed notice/source hashes, same-version repair, and data-retaining uninstall; clean OS, Windows 11, version migration, and public distribution clearance remain pending.
+
 2026-10-09 00:13 · Replaced pptx-preview with pinned Apache-2.0 pptx-renderer 1.3.0; blocked linked-resource loads after an Edge test exposed them; 1,682 frontend tests passed (6 skipped), lint/build and real Edge preview checks passed; staged 573 components/868 notice-source records including embedded MPL source verified, with one missing notice and public clearance still pending; native desktop and installer not rebuilt.
 
 2026-10-08 23:34 · Verified identical react-remove-scroll-bar 2.3.7/2.3.8 package code and publisher-added MIT text, reducing missing notices to two; staged 574 components/863 notice-source files passed integrity checks; added internal/public distribution checks with seven regression tests and blocked the inherited release workflow without clearance; no new installer or public release produced.
